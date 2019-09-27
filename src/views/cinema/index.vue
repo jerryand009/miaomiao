@@ -17,73 +17,15 @@
             </header>
             <div class="body">
                 <ul>
-                    <li>
+                    <li v-for="item in cinemaList" :key="item.id">
                         <div>
-                            <p class="title">哈艺时尚影城（同德围店）<span class="price">18</span><span>元起</span></p>
-                            <p class="address">白云区西槎路221号凯升广场首层（上步牌坊对面）</p>
+                            <p class="title">{{item.nm}}<span class="price">{{item.sellPrice}}</span><span>元起</span></p>
+                            <p class="address">{{item.addr}}</p>
                             <p class="card">
                                 <span>
-                                    <i>退</i>
-                                    <i>折扣卡</i>
-                                    <i>小吃</i>
+                                    <i v-for="(value,key) in item.tag" v-if="value==1">{{key|tagFilter}}</i>
                                 </span>
-                                <span>1183.6km</span>
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <p class="title">哈艺时尚影城（同德围店）<span class="price">18</span><span>元起</span></p>
-                            <p class="address">白云区西槎路221号凯升广场首层（上步牌坊对面）</p>
-                            <p class="card">
-                                <span>
-                                    <i>退</i>
-                                    <i>折扣卡</i>
-                                    <i>小吃</i>
-                                </span>
-                                <span>1183.6km</span>
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <p class="title">哈艺时尚影城（同德围店）<span class="price">18</span><span>元起</span></p>
-                            <p class="address">白云区西槎路221号凯升广场首层（上步牌坊对面）</p>
-                            <p class="card">
-                                <span>
-                                    <i>退</i>
-                                    <i>折扣卡</i>
-                                    <i>小吃</i>
-                                </span>
-                                <span>1183.6km</span>
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <p class="title">哈艺时尚影城（同德围店）<span class="price">18</span><span>元起</span></p>
-                            <p class="address">白云区西槎路221号凯升广场首层（上步牌坊对面）</p>
-                            <p class="card">
-                                <span>
-                                    <i>退</i>
-                                    <i>折扣卡</i>
-                                    <i>小吃</i>
-                                </span>
-                                <span>1183.6km</span>
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <p class="title">哈艺时尚影城（同德围店）<span class="price">18</span><span>元起</span></p>
-                            <p class="address">白云区西槎路221号凯升广场首层（上步牌坊对面）</p>
-                            <p class="card">
-                                <span>
-                                    <i>退</i>
-                                    <i>折扣卡</i>
-                                    <i>小吃</i>
-                                </span>
-                                <span>1183.6km</span>
+                                <span>{{item.distance}}</span>
                             </p>
                         </div>
                     </li>
@@ -102,6 +44,25 @@
         components:{
             AppHeader,
             AppFooter
+        },
+        data(){
+            return {
+              cinemaList:[]
+            }
+        },
+        mounted(){
+            this.axios.get('/api/cinemaList?cityId=10').then((res)=>{
+              console.log(res.data.data.cinemas);
+              if (res.data.msg==='ok'){
+                this.cinemaList = res.data.data.cinemas
+              }
+            })
+        },
+        filters:{
+            tagFilter:function(k) {
+              let obj={allowRefund:"退",buyout:"售罄",cityCardTag:"city",endorse:"en",sell:"热卖",snack:'零食',vipTag:'折扣卡',deal:"deal"}
+              return obj[k]
+            }
         }
     }
 </script>
@@ -133,13 +94,15 @@
                 ul {
                     padding: 20px 20px 0;
                     li {
-                        height: 100px;
+
                         margin-bottom: 20px;
                         div {
                             border-bottom: 1px solid #ccc;
                             padding-bottom: 5px;
+                            display: flex;
+                            flex-direction: column;
                             p {
-                                height: 30px;
+                                margin-bottom: 10px;
                             }
                             .title {
                                 font-size: 16px;
@@ -152,6 +115,7 @@
                             }
                             .address {
                                 font-size: 14px;
+
                             }
                             .card {
                                 display: flex;
@@ -160,17 +124,12 @@
                                     i {
                                         margin-right: 2px;
                                         padding:0 2px;
-                                        &:nth-child(1){
+                                        &:nth-child(1n){
                                             border: 1px solid #589daf;
                                             border-radius: 2px;
                                             color: #589daf;
                                         }
-                                        &:nth-child(2){
-                                            border: 1px solid #F90;
-                                            border-radius: 2px;
-                                            color: #F90;
-                                        }
-                                        &:nth-child(3){
+                                        &:nth-child(2n){
                                             border: 1px solid #F90;
                                             border-radius: 2px;
                                             color: #F90;

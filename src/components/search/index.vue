@@ -2,39 +2,23 @@
     <div class="main">
         <div class="search">
             <span class="iconfont icon-sousuo"></span>
-            <input type="text" value="">
+            <input type="text" value="" v-model="searchKey">
         </div>
         <div class="result">
             <ul>
-                <li>
+                <li v-for="item in movieResult" :key="item.id">
                     <div class="movieItem">
                         <div class="pic">
-                            <img src="http://p0.meituan.net/128.180/movie/dfaf2fc4169522642294fae240d35f522332427.jpg" alt="">
+                            <img :src="item.img|setWidthHeight('120.80')" alt="">
                         </div>
                         <div class="info">
-                            <h2>友情至上</h2>
-                            <p>Friend Zone</p>
-                            <p>剧情 爱情</p>
-                            <p>2019-9-20</p>
+                            <h2>{{item.nm}}</h2>
+                            <p>{{item.enm}}</p>
+                            <p>{{item.cat}}</p>
+                            <p>{{item.rt}}</p>
                         </div>
                         <div class="score">
-                            <span>9.2</span>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="movieItem">
-                        <div class="pic">
-                            <img src="http://p0.meituan.net/128.180/movie/7c47821fcd6e0aadfe44d24a1fbf61ba2576528.jpg" alt="">
-                        </div>
-                        <div class="info">
-                            <h2>徒手攀岩</h2>
-                            <p>Free Solo</p>
-                            <p>纪录片</p>
-                            <p>2019-09-06</p>
-                        </div>
-                        <div class="score">
-                            <span>8.7</span>
+                            <span>{{item.sc}}</span>
                         </div>
                     </div>
                 </li>
@@ -45,12 +29,38 @@
 
 <script>
     export default {
-        name: "search"
+        name: "search",
+        data(){
+          return {
+            searchKey:'',
+            movieResult:[],
+            timeId:null,
+          }
+        },
+        methods:{
+            searchMovie(){
+                clearInterval(this.timeId);
+                this.timeId = setInterval(()=>{
+                  this.axios.get('/api/searchList?cityId=10&kw='+this.searchKey).then((res)=>{
+                    if (res.data.msg==='ok'){
+                      this.movieResult = res.data.data.movies.list;
+                    }
+                  });
+                  clearInterval(this.timeId);
+                },500);
+            }
+        },
+        watch:{
+            searchKey: function(newVal) {
+              this.searchMovie()
+            }
+        }
     }
 </script>
 
 <style scoped lang="scss">
     .main {
+        padding-bottom: 50px;
         .search {
             border: 10px solid #f5f5f5;
             position: relative;
@@ -94,11 +104,19 @@
                             h2 {
                                 flex: auto;
                                 font-weight: bold;
+                                width: 200px;
+                                overflow: hidden;
+                                text-overflow:ellipsis;
+                                white-space: nowrap;
                             }
                             p {
                                 flex: auto;
                                 color: #666;
                                 font-size: 13px;
+                                width: 200px;
+                                overflow: hidden;
+                                text-overflow:ellipsis;
+                                white-space: nowrap;
                             }
                         }
                         .score {

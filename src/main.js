@@ -3,9 +3,12 @@ import App from "./App.vue";
 import router from "./routers";
 import store from "./stores";
 import "./registerServiceWorker";
-
+import axios from "axios"
+Vue.prototype.axios = axios;
 Vue.config.productionTip = false;
-
+Vue.filter("setWidthHeight",function(url,WidthXHeight) {
+  return url.replace(/w\.h/,WidthXHeight);
+});
 new Vue({
   router,
   store,

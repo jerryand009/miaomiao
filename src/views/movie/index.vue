@@ -1,6 +1,6 @@
 <template>
-    <div class="main">
-        <AppHeader title="喵喵电影"></AppHeader>
+    <div class="movie">
+        <AppHeader title="喵喵电影" class="appHeader"></AppHeader>
         <div class="content">
             <ul class="nav">
                 <router-link to="/movie/city" tag="li">
@@ -37,11 +37,19 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.main {
+.movie {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    .appHeader {
+        z-index: 999;
+    }
     .content {
         padding-top: 50px;
         padding-bottom: 50px;
+        height: 100%;
         .nav {
+            z-index: 999;
             line-height: 46px;
             display: flex;
             border-bottom: 1px solid #ccc;
