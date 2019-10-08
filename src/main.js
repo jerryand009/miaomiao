@@ -9,6 +9,11 @@ Vue.config.productionTip = false;
 Vue.filter("setWidthHeight",function(url,WidthXHeight) {
   return url.replace(/w\.h/,WidthXHeight);
 });
+import Scroller from '@/components/scroller'
+import Loading from '@/components/loading'
+Vue.component("Scroller",Scroller);
+Vue.component("Loading",Loading);
+
 new Vue({
   router,
   store,

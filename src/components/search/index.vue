@@ -4,26 +4,28 @@
             <span class="iconfont icon-sousuo"></span>
             <input type="text" value="" v-model="searchKey">
         </div>
-        <div class="result">
-            <ul>
-                <li v-for="item in movieResult" :key="item.id">
-                    <div class="movieItem">
-                        <div class="pic">
-                            <img :src="item.img|setWidthHeight('120.80')" alt="">
+        <Scroller>
+            <div class="result">
+                <ul>
+                    <li v-for="item in movieResult" :key="item.id">
+                        <div class="movieItem">
+                            <div class="pic">
+                                <img :src="item.img|setWidthHeight('120.80')" alt="">
+                            </div>
+                            <div class="info">
+                                <h2>{{item.nm}}</h2>
+                                <p>{{item.enm}}</p>
+                                <p>{{item.cat}}</p>
+                                <p>{{item.rt}}</p>
+                            </div>
+                            <div class="score">
+                                <span>{{item.sc}}</span>
+                            </div>
                         </div>
-                        <div class="info">
-                            <h2>{{item.nm}}</h2>
-                            <p>{{item.enm}}</p>
-                            <p>{{item.cat}}</p>
-                            <p>{{item.rt}}</p>
-                        </div>
-                        <div class="score">
-                            <span>{{item.sc}}</span>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </div>
+                    </li>
+                </ul>
+            </div>
+        </Scroller>
     </div>
 </template>
 
@@ -41,8 +43,8 @@
             searchMovie(){
                 clearInterval(this.timeId);
                 this.timeId = setInterval(()=>{
-                  this.axios.get('/api/searchList?cityId=10&kw='+this.searchKey).then((res)=>{
-                    if (res.data.msg==='ok'){
+                  this.axios.get('/api/searchList?cityId='+this.$store.state.city.id+'&kw='+this.searchKey).then((res)=>{
+                    if (res.data.msg==='ok'&&res.data.data.movies){
                       this.movieResult = res.data.data.movies.list;
                     }
                   });
@@ -61,7 +63,9 @@
 <style scoped lang="scss">
     .main {
         padding-bottom: 50px;
+        height: 100%;
         .search {
+            z-index: 99;
             border: 10px solid #f5f5f5;
             position: relative;
             span {
@@ -79,6 +83,7 @@
         }
         .result {
             margin: 0 10px;
+
             ul {
                 display: flex;
                 flex-wrap: wrap;

@@ -4,7 +4,7 @@
         <div class="content">
             <ul class="nav">
                 <router-link to="/movie/city" tag="li">
-                    <p>北京 <span class="iconfont icon-xiala"></span></p>
+                    <p>{{$store.state.city.nm}} <span class="iconfont icon-xiala"></span></p>
                 </router-link>
                 <router-link to="/movie/playing" tag="li">
                     <p>正在热映</p>

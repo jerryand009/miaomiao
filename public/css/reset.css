@@ -48,3 +48,5 @@ table {
   border-spacing: 0;
 }
 input:focus{border: none;}
+
+.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
