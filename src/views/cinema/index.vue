@@ -1,9 +1,8 @@
 <template>
     <div class="main">
-        <AppHeader title="喵喵影院"></AppHeader>
+        <AppHeader title="喵喵影院" class="appHeader"></AppHeader>
         <div class="content">
-            <header>
-                <ul class="nav">
+            <ul class="nav clearfix">
                     <li class="router-link-active">
                         <p>全城 <span class="iconfont icon-xiala"></span></p>
                     </li>
@@ -13,26 +12,27 @@
                     <li>
                         <p>特色 <span class="iconfont icon-xiala"></span></p>
                     </li>
-                </ul>
-            </header>
+        </ul>
             <div class="body">
-                <ul>
-                    <li v-for="item in cinemaList" :key="item.id">
-                        <div>
-                            <p class="title">{{item.nm}}<span class="price">{{item.sellPrice}}</span><span>元起</span></p>
-                            <p class="address">{{item.addr}}</p>
-                            <p class="card">
+                <Scroller>
+                    <ul>
+                        <li v-for="item in cinemaList" :key="item.id">
+                            <div>
+                                <p class="title">{{item.nm}}<span class="price">{{item.sellPrice}}</span><span>元起</span></p>
+                                <p class="address">{{item.addr}}</p>
+                                <p class="card">
                                 <span>
                                     <i v-for="(value,key) in item.tag" v-if="value==1">{{key|tagFilter}}</i>
                                 </span>
-                                <span>{{item.distance}}</span>
-                            </p>
-                        </div>
-                    </li>
-                </ul>
+                                    <span>{{item.distance}}</span>
+                                </p>
+                            </div>
+                        </li>
+                    </ul>
+                </Scroller>
             </div>
         </div>
-        <AppFooter></AppFooter>
+        <AppFooter class="appFooter"></AppFooter>
     </div>
 </template>
 
@@ -47,16 +47,21 @@
         },
         data(){
             return {
-              cinemaList:[]
+              cinemaList:[],
+              prevCity:-1
             }
         },
-        mounted(){
-            this.axios.get('/api/cinemaList?cityId=10').then((res)=>{
-              console.log(res.data.data.cinemas);
+        activated(){
+          let currentCity = this.$store.state.city.id;
+          if (this.prevCity!=currentCity){
+            this.axios.get('/api/cinemaList?cityId='+currentCity).then((res)=>{
+              // console.log(res.data.data.cinemas);
               if (res.data.msg==='ok'){
                 this.cinemaList = res.data.data.cinemas
               }
             })
+            this.prevCity = currentCity;
+          }
         },
         filters:{
             tagFilter:function(k) {
@@ -69,7 +74,12 @@
 
 <style scoped lang="scss">
     .main {
+        height: 100%;
+        .appHeader {
+            z-index: 99;
+        }
         .content {
+            height: 100%;
             padding-top: 50px;
             padding-bottom: 50px;
             .nav {
@@ -79,10 +89,12 @@
                 position: fixed;
                 width: 100%;
                 background-color: #fff;
+                z-index: 99;
                 li {
                     flex:1;
                     justify-content: center;
                     text-align: center;
+                    background-color: #fff;
                 }
                 .router-link-active {
                     color: $baseColor;
@@ -91,6 +103,7 @@
             }
             .body {
                 padding-top: 50px;
+                height: 100%;
                 ul {
                     padding: 20px 20px 0;
                     li {
