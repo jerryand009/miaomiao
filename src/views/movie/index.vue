@@ -25,13 +25,39 @@
 </template>
 
 <script>
-import AppHeader from '@/components/header/index.vue'
-import AppFooter from '@/components/footer/index.vue'
+import AppHeader from '@/components/header'
+import AppFooter from '@/components/footer'
+import { Msgbox } from '@/components/JS'
+
 export default {
     name:'movie',
     components:{
         AppHeader,
         AppFooter
+    },
+    mounted(){
+      this.axios.get("/api/getlocation").then((res)=>{
+        if (res.data.msg==="ok"){
+          if (this.$store.state.city.id!=res.data.data.id){ //如果拿到的定位城市与localstorage中不一致才弹窗
+            let currentId = res.data.data.id;
+            let currentNm = res.data.data.nm;
+            let that = this
+            Msgbox({
+              title:"定位",
+              content:currentNm,
+              cancel:"取消",
+              confirm:"确定定位",
+              handleCancel(){
+                console.log(this);
+              },
+              handleConfirm(){
+                that.$store.commit('city/CITY_INFO',{id:currentId,nm:currentNm});
+                localStorage.setItem('currentCity',JSON.stringify({id:currentId,nm:currentNm}));
+              }
+            })
+          }
+        }
+      });
     }
 }
 </script>

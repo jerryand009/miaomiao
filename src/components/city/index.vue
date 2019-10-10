@@ -38,7 +38,7 @@
     data(){
       return {
         citiesList: [],
-        hotcities:[],
+        hotcities:[]
       }
     },
     mounted() {

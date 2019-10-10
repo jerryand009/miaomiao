@@ -37,8 +37,8 @@
 </template>
 
 <script>
-    import AppHeader from '@/components/header/index.vue'
-    import AppFooter from '@/components/footer/index.vue'
+    import AppHeader from '@/components/header'
+    import AppFooter from '@/components/footer'
     export default {
         name:'cinema',
         components:{
