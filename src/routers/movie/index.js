@@ -14,6 +14,15 @@ export default {
         path: 'search',
         component: () => import("@/components/search")
     },{
+        path:'detail/:movieId',
+        components:{
+            default: () => import("@/components/playing"),
+            detail: () => import("@/views/movie/detail")
+        },
+        props:{
+            detail:true,
+        }
+    },{
         path:'',
         redirect:'playing'
     }

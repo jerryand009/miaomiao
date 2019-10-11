@@ -1,6 +1,6 @@
 <template>
     <header>
-        <span>{{title}}</span>
+        <slot></slot><span>{{title}}</span>
     </header>
 </template>
 

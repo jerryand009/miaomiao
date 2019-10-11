@@ -5,7 +5,7 @@
             <ul>
                 <li>{{pullDownMsg}}</li>
                 <li v-for="item in movieList" :key="item.id">
-                    <div class="movieItem" @tap="handleTap">
+                    <div class="movieItem" @tap="handleTap(item.id)">
                         <div class="pic">
                             <img :src="item.img|setWidthHeight('120.80')" alt="">
                         </div>
@@ -50,8 +50,9 @@
 
     },
     methods: {
-      handleTap() {
-        console.log("tap");
+      handleTap(movieId) {
+        console.log("tap"+movieId);
+        this.$router.push("/movie/detail/"+movieId)
       },
       handleScroll(position,scroll) {
         console.log('scroll',position,"__",scroll);
